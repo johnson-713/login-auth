@@ -7,6 +7,9 @@ import { Button } from "@/components/ui/button";
 import { GoogleIcon } from "../components/GoogleIcon";
 import { Slider } from "../components/Slider";
 import toast from "react-hot-toast";
+import { CommonDialog } from "../components/Dialog";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface LoginData {
   email: string;
@@ -38,6 +41,19 @@ const Page = () => {
       }
     } catch (error) {
       console.error("Login Error:", error);
+      // Implement error handling for user (e.g., display message)
+    }
+  };
+
+  const forgotPassword = async () => {
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(formdata?.email);
+      if (data) console.log(data);
+      if (error) {
+        toast.error(error?.message);
+      }
+    } catch (error) {
+      console.error("Forgot password Error:", error);
       // Implement error handling for user (e.g., display message)
     }
   };
@@ -75,13 +91,14 @@ const Page = () => {
     setformData((prev) => ({ ...prev, [name]: value }));
   };
 
-  console.log("is login", isLogin);
-
   return (
     <div className="flex flex-col justify-center h-[100vh] items-center gap-[10px]">
-      <Text text="Log in to your account" className="font-bold text-[28px]" />
       <Text
-        text="Welcome back! Please enter your details"
+        text={isLogin ? "Log in to your account" : "Create an Account"}
+        className="font-bold text-[28px]"
+      />
+      <Text
+        text={isLogin && "Welcome back! Please enter your details"}
         className="font-medium text-[16px] text-[#808080]"
       />
       <div className="flex flex-col gap-[20px] min-w-[300px]">
@@ -102,6 +119,26 @@ const Page = () => {
           onChange={handleChange}
           placeholder="Enter your password"
         />
+        {isLogin && (
+          <div className="flex justify-between">
+            <div className="flex items-center space-x-2">
+              <Checkbox id="remember" />
+              <Label htmlFor="remember" className="text-[12px]">
+                Remember for 30 days
+              </Label>
+            </div>
+            <CommonDialog
+              title="Forgot password"
+              label="Email"
+              buttonLabel="Send Email"
+              placeholder="Enter your Email"
+              name="email"
+              value={formdata?.email}
+              onChange={handleChange}
+              onClick={() => forgotPassword()}
+            />
+          </div>
+        )}
         <div>
           <Button
             className="bg-[#9575CD] w-[100%]"
