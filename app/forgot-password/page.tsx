@@ -1,9 +1,12 @@
-import { Button } from "@/components/ui/button";
+'use client'
+
 import React, { useState } from "react";
-import Text from "../components/Text";
-import { InputContainer } from "../components/InputContainer";
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
+import Text from "@/page-components/Text";
+import { InputContainer } from "@/page-components/InputContainer";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface LoginData {
   email: string;
@@ -46,7 +49,8 @@ const Page = () => {
   };
   return (
     <div className="flex flex-col justify-center h-[100vh] items-center gap-[10px]">
-      <Text text={"Forgot Password"} className="font-bold text-[28px]" />
+      <Image src={'/login.png'} alt="" width={64} height={64} />
+      <Text text={"Forgot Password"} className="font-bold text-[28px] mb-[20px]" />
       <div className="flex flex-col gap-[20px] min-w-[300px]">
         <InputContainer
           label="Email"

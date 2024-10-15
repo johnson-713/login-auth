@@ -1,6 +1,6 @@
 "use client";
 import { supabase } from "@/lib/supabase";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 import { Label } from "@/components/ui/label";
@@ -11,7 +11,6 @@ import { InputContainer } from "@/page-components/InputContainer";
 import { CommonDialog } from "@/page-components/Dialog";
 import { GoogleIcon } from "@/page-components/GoogleIcon";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 interface LoginData {
   email: string;
@@ -23,10 +22,7 @@ const Page = () => {
     email: "",
     password: "",
   });
-  const [isLogin, setIsLogin] = useState(true);
-  const [userData, setUserData] = useState({});
-  console.log(userData)
-  const router = useRouter();
+  const [isLogin, setIsLogin] = useState(false);
 
   const setNewView = async (user: string | undefined) => {
     const { data, error } = await supabase.from("views").insert({
@@ -42,9 +38,8 @@ const Page = () => {
       const { data, error } = await supabase.auth.signInWithPassword(formdata);
       if (data) {
         console.log(data);
-        setUserData(!!data?.user);
         setformData({ email: "", password: "" });
-      }
+      }     
       if (error) {
         toast.error(error?.message);
       }
@@ -56,13 +51,8 @@ const Page = () => {
 
   const forgotPassword = async () => {
     try {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(
-        formdata?.email
-      );
-      if (data) {
-        console.log(data);
-        setformData({ email: "", password: "" });
-      }
+      const { data, error } = await supabase.auth.resetPasswordForEmail(formdata?.email);
+      if (data) console.log(data);
       if (error) {
         toast.error(error?.message);
       }
@@ -94,10 +84,7 @@ const Page = () => {
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
       });
-      if (data) {
-        console.log(data);
-        router.push("/login");
-      }
+      if (data) console.log(data);
       if (error) {
         toast.error(error?.message);
       }
@@ -106,19 +93,6 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error("Error fetching user data:", error);
-      } else {
-        setUserData(data?.user);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setformData((prev) => ({ ...prev, [name]: value }));
@@ -126,7 +100,7 @@ const Page = () => {
 
   return (
     <div className="flex flex-col justify-center h-[100vh] items-center gap-[10px]">
-      <Image src={"/login.png"} alt="" width={64} height={64} />
+        <Image src={'/login.png'} alt="" width={64} height={64} />
       <Text
         text={isLogin ? "Log in to your account" : "Create an Account"}
         className="font-bold text-[28px]"
