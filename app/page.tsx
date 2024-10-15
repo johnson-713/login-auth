@@ -21,7 +21,7 @@ function Home() {
     email: "",
     password: "",
   });
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
 
   const setNewView = async (user: string | undefined) => {
     const { data, error } = await supabase.from("views").insert({
