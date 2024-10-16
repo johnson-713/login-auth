@@ -39,6 +39,7 @@ const Page = () => {
       if (data) {
         console.log(data);
         setformData({ email: "", password: "" });
+        toast.success('Logged In successfully!!')
       }     
       if (error) {
         toast.error(error?.message);
@@ -69,6 +70,7 @@ const Page = () => {
         console.log(data);
         setformData({ email: "", password: "" });
         setNewView(data?.user?.email);
+        toast.success('Account created successfully!!')
       }     
       if (error) {
         toast.error(error?.message);

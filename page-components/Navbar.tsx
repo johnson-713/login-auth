@@ -25,12 +25,14 @@ export function Navbar() {
         toast.error(error?.message);
       } else {
         toast.success("Logged out successfully!!");
+        setUserData({})
       }
     } catch (error) {
       console.error("Login Error:", error);
       // Implement error handling for user (e.g., display message)
     }
   };
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -75,7 +77,7 @@ export function Navbar() {
       {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
-      userData && userData?.email ? (
+      userData?.email ? (
         <Button className="bg-[#9575CD]" onClick={() => logout()}>
           Log out
         </Button>

@@ -35,7 +35,10 @@ function Home() {
   const login = async () => {
     try {
       const { data, error } = await supabase.auth.signInWithPassword(formdata);
-      if (data) console.log(data);
+      if (data) {
+        console.log(data);
+        setformData({ email: "", password: "" });
+      }  
       if (error) {
         toast.error(error?.message);
       }
@@ -61,8 +64,11 @@ function Home() {
   const signup = async () => {
     try {
       const { data, error } = await supabase.auth.signUp(formdata);
-      if (data) console.log(data);
-      setNewView(data?.user?.email);
+      if (data) {
+        console.log(data);
+        setformData({ email: "", password: "" });
+        setNewView(data?.user?.email);
+      }  
       if (error) {
         toast.error(error?.message);
       }

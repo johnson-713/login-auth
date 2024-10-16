@@ -34,6 +34,7 @@ const Page = () => {
       if (data) {
         console.log(data);
         setNewView(data?.user?.email);
+        setformData({ email: "", password: "" });
       }
       if (error) {
         toast.error(error?.message);
